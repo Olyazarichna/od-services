@@ -17,7 +17,7 @@ const LoginForm = () => {
         formState: { errors },
     } = useForm({
         mode: "onChange",
-        defaultValues: { email: "test@gmail.com", password: "Admintest123%" },
+        defaultValues: { email: "", password: "" },
     });
 
     const onSubmit = (data: { email: string; password: string }) => {
