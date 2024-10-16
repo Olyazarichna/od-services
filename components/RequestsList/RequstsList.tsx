@@ -9,6 +9,7 @@ import {
   Select,
   Typography,
   TextField,
+  Skeleton,
 } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
@@ -182,25 +183,39 @@ const RequestList = ({ showAllRequests }: IRequestList) => {
   const handleDateChange = (id: string, newDate: Dayjs | null) => {
     handleChange(id, "dispatchDate", newDate ? newDate.toISOString() : "");
   };
-
+  if (filteredRequests.length < 1) {
+    return (
+      <Typography variant="body2" color="textSecondary">
+        No requests available at the moment. Please add a request.
+      </Typography>
+    );
+  }
   return (
     <Box sx={{ padding: 3 }}>
       <Typography variant="h6">All Requests</Typography>
       <Box sx={{ width: "30%" }}>
-        <Filter
-          title="From City"
-          cities={uniqueFromCities}
-          selectedCities={fromCityFilter}
-          onCityChange={(city) => handleCityFilterChange(city, true)}
-        />
+        {uniqueFromCities.length > 0 ? (
+          <Filter
+            title="From City"
+            cities={uniqueFromCities}
+            selectedCities={fromCityFilter}
+            onCityChange={(city) => handleCityFilterChange(city, true)}
+          />
+        ) : (
+          <Skeleton variant="rectangular" width="100%" height={30} />
+        )}
       </Box>
       <Box sx={{ width: "30%", mt: 2 }}>
-        <Filter
-          title="To City"
-          cities={uniqueToCities}
-          selectedCities={toCityFilter}
-          onCityChange={(city) => handleCityFilterChange(city, false)}
-        />
+        {uniqueToCities.length > 0 ? (
+          <Filter
+            title="To City"
+            cities={uniqueToCities}
+            selectedCities={toCityFilter}
+            onCityChange={(city) => handleCityFilterChange(city, false)}
+          />
+        ) : (
+          <Skeleton variant="rectangular" width="100%" height={30} />
+        )}
       </Box>
       <Box sx={{ width: "30%", mt: 2 }}>
         <Sorting sortOption={sortOption} onSortChange={setSortOption} />
