@@ -19,7 +19,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { IRequestList } from "../../utils/types";
 import Filter from "../Filter/Filter";
 import Sorting from "../Sorting/Sorting";
-
+import useWidth from "../../hooks/useWidth";
 interface Request {
   idOrder: string;
   fromCity: string;
@@ -42,6 +42,7 @@ const RequestList = ({ showAllRequests }: IRequestList) => {
   const [toCityFilter, setToCityFilter] = useState<string[]>([]);
   const [matchingRequests, setMatchingRequests] = useState<Request[]>([]);
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+  const { isMobile } = useWidth();
   const handleOpen = (id: string) => {
     setCurrentOrder(id);
     setOpen(true);
@@ -191,9 +192,9 @@ const RequestList = ({ showAllRequests }: IRequestList) => {
     );
   }
   return (
-    <Box sx={{ padding: 3 }}>
+    <Box>
       <Typography variant="h6">All Requests</Typography>
-      <Box sx={{ width: "30%" }}>
+      <Box sx={{ width: !isMobile ? "30%" : "100%" }}>
         {uniqueFromCities.length > 0 ? (
           <Filter
             title="From City"
@@ -205,7 +206,7 @@ const RequestList = ({ showAllRequests }: IRequestList) => {
           <Skeleton variant="rectangular" width="100%" height={30} />
         )}
       </Box>
-      <Box sx={{ width: "30%", mt: 2 }}>
+      <Box sx={{ width: !isMobile ? "30%" : "100%", mt: 2 }}>
         {uniqueToCities.length > 0 ? (
           <Filter
             title="To City"
@@ -217,7 +218,7 @@ const RequestList = ({ showAllRequests }: IRequestList) => {
           <Skeleton variant="rectangular" width="100%" height={30} />
         )}
       </Box>
-      <Box sx={{ width: "30%", mt: 2 }}>
+      <Box sx={{ width: !isMobile ? "30%" : "100%", mt: 2 }}>
         <Sorting sortOption={sortOption} onSortChange={setSortOption} />
       </Box>
       <List>
@@ -369,7 +370,7 @@ const RequestList = ({ showAllRequests }: IRequestList) => {
               )}
             </Box>
             {loggedInUser === request.idUser && (
-              <Box>
+              <Box sx={{ ml: isMobile ? 1 : 0 }}>
                 {isEditable === request.idOrder ? (
                   <Button
                     variant="outlined"
@@ -394,6 +395,7 @@ const RequestList = ({ showAllRequests }: IRequestList) => {
                   variant="outlined"
                   color="secondary"
                   onClick={() => handleOpen(request.idOrder)}
+                  sx={{ mt: isMobile ? 1 : 0 }}
                 >
                   Delete
                 </Button>

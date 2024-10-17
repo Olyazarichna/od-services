@@ -17,14 +17,15 @@ import {
 import { menu } from "./data";
 import LoginIcon from "@mui/icons-material/Login";
 import { useRouter } from "next/navigation";
-import { DRAWERWIDTH } from "../../utils/constants";
+import { DRAWERWIDTH, DRAWERWIDTHMOB } from "../../utils/constants";
 import RequestLists from "../RequestsList/RequstsList";
+import useWidth from "../../hooks/useWidth";
 interface IDashboard {
   showAllRequests: boolean;
 }
 export default function Dashboard({ showAllRequests }: IDashboard) {
   const router = useRouter();
-
+  const { isMobile } = useWidth();
   const handleNavigation = (link: string) => {
     const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
     if (!storedUser.id) {
@@ -45,8 +46,8 @@ export default function Dashboard({ showAllRequests }: IDashboard) {
       <AppBar
         position="fixed"
         sx={{
-          width: `calc(100% - ${DRAWERWIDTH}px)`,
-          ml: `${DRAWERWIDTH}px`,
+          width: `calc(100% - ${isMobile ? DRAWERWIDTHMOB : DRAWERWIDTH}px)`,
+          ml: `${isMobile ? DRAWERWIDTHMOB : DRAWERWIDTH}px`,
           backgroundColor: "#fff",
           zIndex: 1200,
         }}
@@ -63,10 +64,10 @@ export default function Dashboard({ showAllRequests }: IDashboard) {
       </AppBar>
       <Drawer
         sx={{
-          width: DRAWERWIDTH,
+          width: isMobile ? DRAWERWIDTHMOB : DRAWERWIDTH,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: DRAWERWIDTH,
+            width: isMobile ? DRAWERWIDTHMOB : DRAWERWIDTH,
             boxSizing: "border-box",
             backgroundColor: "#efebe9",
           },
@@ -83,7 +84,7 @@ export default function Dashboard({ showAllRequests }: IDashboard) {
                 <ListItemIcon>
                   <item.icon />
                 </ListItemIcon>
-                <ListItemText primary={item.title} />
+                {!isMobile && <ListItemText primary={item.title} />}
               </ListItemButton>
             </ListItem>
           ))}
@@ -96,7 +97,7 @@ export default function Dashboard({ showAllRequests }: IDashboard) {
                 <ListItemIcon>
                   <LoginIcon />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                {!isMobile && <ListItemText primary={text} />}
               </ListItemButton>
             </ListItem>
           ))}
